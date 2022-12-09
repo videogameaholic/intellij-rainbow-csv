@@ -20,6 +20,8 @@ public class CsvSettingsData {
 
     public String commentPrefix = "";
 
+    public String fileExtensionList = "csv";
+
     public CsvSettingsData() {
     }
 }

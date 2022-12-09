@@ -18,11 +18,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,44 +31,7 @@ public class Settings implements EditorOptionsProvider {
     private JComboBox escapeCharacterComboBox;
     private JTextField commentPrefixTextField;
     private JCheckBox highlightCommentsCheckBox;
-
-    @Override
-    public @NotNull String getId() {
-        return "RainbowCSV.Settings";
-    }
-
-    @Override
-    public @Nls(capitalization = Nls.Capitalization.Title) String getDisplayName() {
-        return RainbowCsvHelper.OPTIONS_NAME;
-    }
-
-    @Override
-    public @Nullable JComponent createComponent() {
-        return panel;
-    }
-
-    @Override
-    public boolean isModified() {
-        CsvSettings settings = CsvSettings.getInstance();
-
-        return this.rainbowCSVEnabledCheckBox.isSelected() != settings.isEnabled()
-                || !settings.getDelimiter().equals(this.delimiterComboBox.getSelectedItem())
-                || !settings.getEscapeCharacter().equals(this.escapeCharacterComboBox.getSelectedItem())
-                || settings.isHighlightComments() != this.highlightCommentsCheckBox.isSelected()
-                || !settings.getCommentPrefix().equals(this.commentPrefixTextField.getText());
-    }
-
-    @Override
-    public void apply() throws ConfigurationException {
-        CsvSettings settings = CsvSettings.getInstance();
-        settings.setEnabled(rainbowCSVEnabledCheckBox.isSelected());
-        settings.setDelimiter((Delimiter) delimiterComboBox.getSelectedItem());
-        settings.setEscapeCharacter((EscapeCharacter) escapeCharacterComboBox.getSelectedItem());
-        settings.setHighlightComments(highlightCommentsCheckBox.isSelected());
-        settings.setCommentPrefix(commentPrefixTextField.getText());
-
-        reparseFiles();
-    }
+    private JTextField fileExtensionsTextField;
 
     private static void reparseFiles() {
         Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
@@ -99,6 +58,46 @@ public class Settings implements EditorOptionsProvider {
     }
 
     @Override
+    public @NotNull String getId() {
+        return "RainbowCSV.Settings";
+    }
+
+    @Override
+    public @Nls(capitalization = Nls.Capitalization.Title) String getDisplayName() {
+        return RainbowCsvHelper.OPTIONS_NAME;
+    }
+
+    @Override
+    public @Nullable JComponent createComponent() {
+        return panel;
+    }
+
+    @Override
+    public boolean isModified() {
+        CsvSettings settings = CsvSettings.getInstance();
+
+        return this.rainbowCSVEnabledCheckBox.isSelected() != settings.isEnabled()
+                || !settings.getDelimiter().equals(this.delimiterComboBox.getSelectedItem())
+                || !settings.getEscapeCharacter().equals(this.escapeCharacterComboBox.getSelectedItem())
+                || settings.isHighlightComments() != this.highlightCommentsCheckBox.isSelected()
+                || !settings.getCommentPrefix().equals(this.commentPrefixTextField.getText())
+                || !settings.getFileExtensionList().equals(this.fileExtensionsTextField.getText());
+    }
+
+    @Override
+    public void apply() throws ConfigurationException {
+        CsvSettings settings = CsvSettings.getInstance();
+        settings.setEnabled(rainbowCSVEnabledCheckBox.isSelected());
+        settings.setDelimiter((Delimiter) delimiterComboBox.getSelectedItem());
+        settings.setEscapeCharacter((EscapeCharacter) escapeCharacterComboBox.getSelectedItem());
+        settings.setHighlightComments(highlightCommentsCheckBox.isSelected());
+        settings.setCommentPrefix(commentPrefixTextField.getText());
+        settings.setFileExtensionList(fileExtensionsTextField.getText());
+
+        reparseFiles();
+    }
+
+    @Override
     public void reset() {
         CsvSettings settings = CsvSettings.getInstance();
 
@@ -107,6 +106,7 @@ public class Settings implements EditorOptionsProvider {
         escapeCharacterComboBox.setSelectedItem(settings.getEscapeCharacter());
         highlightCommentsCheckBox.setSelected(settings.isHighlightComments());
         commentPrefixTextField.setText(settings.getCommentPrefix());
+        fileExtensionsTextField.setText(settings.getFileExtensionList());
     }
 
     protected void createUIComponents() {

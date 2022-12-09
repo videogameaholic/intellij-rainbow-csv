@@ -9,26 +9,17 @@ import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+
 @State(
         name = "CsvSettings",
         storages = {@Storage("rainbow-csv.xml")}
 )
 public class CsvSettings implements PersistentStateComponent<CsvSettingsData> {
 
-    private CsvSettingsData csvSettings = new CsvSettingsData();
-
     private static final CsvSettings csvSettingsComponent = new CsvSettings();
-
-    @Nullable
-    @Override
-    public CsvSettingsData getState() {
-        return csvSettings;
-    }
-
-    @Override
-    public void loadState(@NotNull CsvSettingsData state) {
-        this.csvSettings = state;
-    }
+    private CsvSettingsData csvSettings = new CsvSettingsData();
 
     public CsvSettings() {
     }
@@ -46,51 +37,74 @@ public class CsvSettings implements PersistentStateComponent<CsvSettingsData> {
         return service;
     }
 
-    public void setEnabled(boolean enabled) {
-        getState().enabled = enabled;
+    @Nullable
+    @Override
+    public CsvSettingsData getState() {
+        return csvSettings;
+    }
+
+    @Override
+    public void loadState(@NotNull CsvSettingsData state) {
+        this.csvSettings = state;
     }
 
     public boolean isEnabled() {
         return getState().enabled;
     }
 
-    public void setWelcomeNotifyShowed(boolean welcomeNotifyShowed) {
-        getState().welcomeNotifyShowed = welcomeNotifyShowed;
+    public void setEnabled(boolean enabled) {
+        getState().enabled = enabled;
     }
 
     public boolean isWelcomeNotifyShowed() {
         return getState().welcomeNotifyShowed;
     }
 
-    public void setDelimiter(Delimiter delimiter) {
-        getState().delimiter = delimiter;
+    public void setWelcomeNotifyShowed(boolean welcomeNotifyShowed) {
+        getState().welcomeNotifyShowed = welcomeNotifyShowed;
     }
 
     public Delimiter getDelimiter() {
         return getState().delimiter;
     }
 
-    public void setEscapeCharacter(EscapeCharacter escapeCharacter) {
-        getState().escapeCharacter = escapeCharacter;
+    public void setDelimiter(Delimiter delimiter) {
+        getState().delimiter = delimiter;
     }
 
     public EscapeCharacter getEscapeCharacter() {
         return getState().escapeCharacter;
     }
 
-    public void setHighlightComments(boolean enabled) {
-        getState().highlightComments = enabled;
+    public void setEscapeCharacter(EscapeCharacter escapeCharacter) {
+        getState().escapeCharacter = escapeCharacter;
     }
 
     public boolean isHighlightComments() {
         return getState().highlightComments;
     }
 
-    public void setCommentPrefix(String commentPrefix) {
-        getState().commentPrefix = commentPrefix;
+    public void setHighlightComments(boolean enabled) {
+        getState().highlightComments = enabled;
     }
 
     public String getCommentPrefix() {
         return getState().commentPrefix;
+    }
+
+    public void setCommentPrefix(String commentPrefix) {
+        getState().commentPrefix = commentPrefix;
+    }
+
+    public String getFileExtensionList() {
+        return getState().fileExtensionList;
+    }
+
+    public void setFileExtensionList(String fileExtensionList) {
+        getState().fileExtensionList = fileExtensionList;
+    }
+    
+    public List<String> getFileExtensions() {
+        return Arrays.asList(getState().fileExtensionList.split(","));
     }
 }
